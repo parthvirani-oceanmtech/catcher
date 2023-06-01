@@ -41,9 +41,6 @@ class EmailManualHandler extends BaseEmailHandler {
         subject: getEmailTitle(report),
         recipients: recipients,
         isHTML: sendHtml,
-        attachments: [
-          report.screenshot?.path ?? "",
-        ],
       );
       _printLog("Creating mail request");
       await FlutterMailer.send(mailOptions);
