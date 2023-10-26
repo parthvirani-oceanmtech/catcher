@@ -1,37 +1,37 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: "[BUG]"
-labels: New issue
-assignees: jhomlala
+title: ''
+labels: bug
+assignees: ThexXTURBOXx
 
 ---
 
-**Describe the bug**
+## Describe the bug
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+## To Reproduce
 Steps to reproduce the behavior:
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
 4. See error
 
-**Expected behavior**
+## Expected behavior
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
+## Screenshots
 If applicable, add screenshots to help explain your problem.
 
-**Flutter doctor**
-Please add flutter doctor output here.
+## Device (please complete the following information!)
+ - Device: [e.g. iPhone 6, Desktop Computer]
+ - OS: [e.g. iOS 8.1, Windows 10 21H2]
+ - Browser: [e.g. Stock, Chrome, Safari, Firefox]
+ - `catcher_2` version: [e.g. 1.0.0]
 
-**Catcher version**
-- Version: 
-
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
-
-**Additional context**
+## Additional context
 Add any other context about the problem here.
+
+## Checklist
+ - [ ] I have read and followed the **entire** [README](https://github.com/ThexXTURBOXx/catcher_2) and it has not provided the solution I need.
+ - [ ] I have provided all the information I can (incl. auth URL etc.)

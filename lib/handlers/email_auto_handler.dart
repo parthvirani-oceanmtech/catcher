@@ -1,6 +1,6 @@
-import 'package:catcher/handlers/base_email_handler.dart';
-import 'package:catcher/model/platform_type.dart';
-import 'package:catcher/model/report.dart';
+import 'package:catcher_2/handlers/base_email_handler.dart';
+import 'package:catcher_2/model/platform_type.dart';
+import 'package:catcher_2/model/report.dart';
 import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
@@ -11,6 +11,7 @@ class EmailAutoHandler extends BaseEmailHandler {
   final String senderEmail;
   final String senderName;
   final String senderPassword;
+  final String? senderUsername;
   final bool enableSsl;
   final List<String> recipients;
   final bool sendHtml;
@@ -23,6 +24,7 @@ class EmailAutoHandler extends BaseEmailHandler {
     this.senderName,
     this.senderPassword,
     this.recipients, {
+    this.senderUsername,
     this.enableSsl = false,
     this.sendHtml = true,
     this.printLogs = false,
@@ -34,18 +36,16 @@ class EmailAutoHandler extends BaseEmailHandler {
     bool enableCustomParameters = true,
   })  : assert(recipients.isNotEmpty, "Recipients can't be null or empty"),
         super(
-          enableDeviceParameters,
-          enableApplicationParameters,
-          enableStackTrace,
-          enableCustomParameters,
-          emailTitle,
-          emailHeader,
+          enableDeviceParameters: enableDeviceParameters,
+          enableApplicationParameters: enableApplicationParameters,
+          enableStackTrace: enableStackTrace,
+          enableCustomParameters: enableCustomParameters,
+          emailTitle: emailTitle,
+          emailHeader: emailHeader,
         );
 
   @override
-  Future<bool> handle(Report error, BuildContext? context) {
-    return _sendMail(error);
-  }
+  Future<bool> handle(Report error, BuildContext? context) => _sendMail(error);
 
   Future<bool> _sendMail(Report report) async {
     try {
@@ -62,14 +62,14 @@ class EmailAutoHandler extends BaseEmailHandler {
       if (sendHtml) {
         message.html = setupHtmlMessageText(report);
       }
-      _printLog("Sending email...");
+      _printLog('Sending email...');
 
       final result = await send(message, _setupSmtpServer());
 
       _printLog(
-        "Email result: mail: ${result.mail} "
-        "sending start time: ${result.messageSendingStart} "
-        "sending end time: ${result.messageSendingEnd}",
+        'Email result: mail: ${result.mail} '
+        'sending start time: ${result.messageSendingStart} '
+        'sending end time: ${result.messageSendingEnd}',
       );
 
       return true;
@@ -80,15 +80,13 @@ class EmailAutoHandler extends BaseEmailHandler {
     }
   }
 
-  SmtpServer _setupSmtpServer() {
-    return SmtpServer(
-      smtpHost,
-      port: smtpPort,
-      ssl: enableSsl,
-      username: senderEmail,
-      password: senderPassword,
-    );
-  }
+  SmtpServer _setupSmtpServer() => SmtpServer(
+        smtpHost,
+        port: smtpPort,
+        ssl: enableSsl,
+        username: senderUsername ?? senderEmail,
+        password: senderPassword,
+      );
 
   void _printLog(String log) {
     if (printLogs) {
