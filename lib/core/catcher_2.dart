@@ -79,12 +79,13 @@ class Catcher2 implements ReportModeAction {
     _configureNavigatorKey(navigatorKey);
     _setupCurrentConfig();
     _configureLogger();
-    _setupErrorHooks();
     _setupReportModeActionInReportMode();
     _setupScreenshotManager();
 
     _loadDeviceInfo();
     _loadApplicationInfo();
+
+    _setupErrorHooks();
 
     if (_currentConfig.handlers.isEmpty) {
       _logger.warning(
@@ -152,9 +153,9 @@ class Catcher2 implements ReportModeAction {
       this.releaseConfig = releaseConfig;
     }
     _setupCurrentConfig();
+    _configureLogger();
     _setupReportModeActionInReportMode();
     _setupScreenshotManager();
-    _configureLogger();
     _localizationOptions = null;
   }
 
@@ -183,15 +184,17 @@ class Catcher2 implements ReportModeAction {
   }
 
   Future _setupErrorHooks() async {
-    FlutterError.onError = (details) async {
-      await _reportError(
+    FlutterError.onError = (details) {
+      _reportError(
         details.exception,
         details.stack,
         errorDetails: details,
       );
+      _currentConfig.onFlutterError?.call(details);
     };
     PlatformDispatcher.instance.onError = (error, stack) {
       _reportError(error, stack);
+      _currentConfig.onPlatformError?.call(error, stack);
       return true;
     };
 
