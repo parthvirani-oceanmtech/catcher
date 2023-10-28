@@ -8,7 +8,7 @@ class Report {
   final dynamic error;
 
   /// Stack trace of error
-  final dynamic stackTrace;
+  final StackTrace? stackTrace;
 
   /// Time when it was caught
   final DateTime dateTime;

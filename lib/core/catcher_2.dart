@@ -205,7 +205,9 @@ class Catcher2 implements ReportModeAction {
           final isolateError = pair as List<dynamic>;
           await _reportError(
             isolateError.first.toString(),
-            isolateError.last.toString(),
+            (isolateError.last is StackTrace? || isolateError.last is StackTrace)
+                ? (isolateError.last as StackTrace)
+                : null,
           );
         }).sendPort,
       );
@@ -282,8 +284,7 @@ class Catcher2 implements ReportModeAction {
 
   /// Remove excluded parameters from device parameters.
   void _removeExcludedParameters() {
-    _deviceParameters
-        .removeWhere((k, v) => _currentConfig.excludedParameters.contains(k));
+    _deviceParameters.removeWhere((k, v) => _currentConfig.excludedParameters.contains(k));
   }
 
   void _loadLinuxParameters(LinuxDeviceInfo linuxDeviceInfo) {
@@ -324,8 +325,7 @@ class Catcher2 implements ReportModeAction {
     try {
       _deviceParameters['computerName'] = windowsDeviceInfo.computerName;
       _deviceParameters['numberOfCores'] = windowsDeviceInfo.numberOfCores;
-      _deviceParameters['systemMemoryInMegabytes'] =
-          windowsDeviceInfo.systemMemoryInMegabytes;
+      _deviceParameters['systemMemoryInMegabytes'] = windowsDeviceInfo.systemMemoryInMegabytes;
     } catch (exception) {
       _logger.warning('Load Windows parameters failed: $exception');
     }
@@ -339,8 +339,7 @@ class Catcher2 implements ReportModeAction {
       _deviceParameters['appVersion'] = webBrowserInfo.appVersion;
       _deviceParameters['browserName'] = webBrowserInfo.browserName.toString();
       _deviceParameters['deviceMemory'] = webBrowserInfo.deviceMemory;
-      _deviceParameters['hardwareConcurrency'] =
-          webBrowserInfo.hardwareConcurrency;
+      _deviceParameters['hardwareConcurrency'] = webBrowserInfo.hardwareConcurrency;
       _deviceParameters['languages'] = webBrowserInfo.languages;
       _deviceParameters['maxTouchPoints'] = webBrowserInfo.maxTouchPoints;
       _deviceParameters['platform'] = webBrowserInfo.platform;
@@ -366,8 +365,7 @@ class Catcher2 implements ReportModeAction {
       _deviceParameters['fingerprint'] = androidDeviceInfo.fingerprint;
       _deviceParameters['hardware'] = androidDeviceInfo.hardware;
       _deviceParameters['host'] = androidDeviceInfo.host;
-      _deviceParameters['isPhysicalDevice'] =
-          androidDeviceInfo.isPhysicalDevice;
+      _deviceParameters['isPhysicalDevice'] = androidDeviceInfo.isPhysicalDevice;
       _deviceParameters['manufacturer'] = androidDeviceInfo.manufacturer;
       _deviceParameters['model'] = androidDeviceInfo.model;
       _deviceParameters['product'] = androidDeviceInfo.product;
@@ -375,14 +373,11 @@ class Catcher2 implements ReportModeAction {
       _deviceParameters['type'] = androidDeviceInfo.type;
       _deviceParameters['versionBaseOs'] = androidDeviceInfo.version.baseOS;
       _deviceParameters['versionCodename'] = androidDeviceInfo.version.codename;
-      _deviceParameters['versionIncremental'] =
-          androidDeviceInfo.version.incremental;
-      _deviceParameters['versionPreviewSdk'] =
-          androidDeviceInfo.version.previewSdkInt;
+      _deviceParameters['versionIncremental'] = androidDeviceInfo.version.incremental;
+      _deviceParameters['versionPreviewSdk'] = androidDeviceInfo.version.previewSdkInt;
       _deviceParameters['versionRelease'] = androidDeviceInfo.version.release;
       _deviceParameters['versionSdk'] = androidDeviceInfo.version.sdkInt;
-      _deviceParameters['versionSecurityPatch'] =
-          androidDeviceInfo.version.securityPatch;
+      _deviceParameters['versionSecurityPatch'] = androidDeviceInfo.version.securityPatch;
     } catch (exception) {
       _logger.warning('Load Android parameters failed: $exception');
     }
@@ -407,8 +402,7 @@ class Catcher2 implements ReportModeAction {
   }
 
   void _loadApplicationInfo() {
-    _applicationParameters['environment'] =
-        describeEnum(ApplicationProfileManager.getApplicationProfile());
+    _applicationParameters['environment'] = describeEnum(ApplicationProfileManager.getApplicationProfile());
 
     PackageInfo.fromPlatform().then((packageInfo) {
       _applicationParameters['version'] = packageInfo.version;
@@ -429,16 +423,14 @@ class Catcher2 implements ReportModeAction {
       }
       if (_currentConfig.localizationOptions.isNotEmpty == true) {
         for (final options in _currentConfig.localizationOptions) {
-          if (options.languageCode.toLowerCase() ==
-              locale.languageCode.toLowerCase()) {
+          if (options.languageCode.toLowerCase() == locale.languageCode.toLowerCase()) {
             _localizationOptions = options;
           }
         }
       }
     }
 
-    _localizationOptions ??=
-        _getDefaultLocalizationOptionsForLanguage(locale.languageCode);
+    _localizationOptions ??= _getDefaultLocalizationOptionsForLanguage(locale.languageCode);
     _setupLocalizationsOptionsInReportMode();
     _setupLocalizationsOptionsInReportsHandler();
   }
@@ -490,7 +482,7 @@ class Catcher2 implements ReportModeAction {
 
   /// Report checked error (error caught in try-catch block). Catcher 2 will
   /// treat this as normal exception and pass it to handlers.
-  static void reportCheckedError(dynamic error, dynamic stackTrace) {
+  static void reportCheckedError(dynamic error, StackTrace? stackTrace) {
     dynamic errorValue = error;
     dynamic stackTraceValue = stackTrace;
     errorValue ??= 'undefined error';
@@ -500,11 +492,10 @@ class Catcher2 implements ReportModeAction {
 
   Future<void> _reportError(
     dynamic error,
-    dynamic stackTrace, {
+    StackTrace? stackTrace, {
     FlutterErrorDetails? errorDetails,
   }) async {
-    if ((errorDetails?.silent ?? false) &&
-        _currentConfig.handleSilentError == false) {
+    if ((errorDetails?.silent ?? false) && _currentConfig.handleSilentError == false) {
       _logger.info(
         'Report error skipped for error: $error. HandleSilentError is false.',
       );
@@ -543,8 +534,7 @@ class Catcher2 implements ReportModeAction {
       return;
     }
 
-    if (_currentConfig.filterFunction != null &&
-        _currentConfig.filterFunction!(report) == false) {
+    if (_currentConfig.filterFunction != null && _currentConfig.filterFunction!(report) == false) {
       _logger.fine(
         "Error: '$error' has been filtered from Catcher 2 logs. "
         'Report will be skipped.',
@@ -619,8 +609,7 @@ class Catcher2 implements ReportModeAction {
 
   @override
   void onActionConfirmed(Report report) {
-    final reportHandler =
-        _getReportHandlerFromExplicitExceptionHandlerMap(report.error);
+    final reportHandler = _getReportHandlerFromExplicitExceptionHandlerMap(report.error);
     if (reportHandler != null) {
       _logger.info('Using explicit report handler');
       _handleReport(report, reportHandler);
@@ -649,9 +638,7 @@ class Catcher2 implements ReportModeAction {
       return;
     }
 
-    reportHandler
-        .handle(report, _getContext())
-        .catchError((dynamic handlerError) {
+    reportHandler.handle(report, _getContext()).catchError((dynamic handlerError) {
       _logger.warning(
         'Error occurred in $reportHandler: '
         '$handlerError',
@@ -688,9 +675,7 @@ class Catcher2 implements ReportModeAction {
 
   @override
   void onActionRejected(Report report) {
-    _currentConfig.handlers
-        .where((handler) => handler.shouldHandleWhenRejected())
-        .forEach((handler) {
+    _currentConfig.handlers.where((handler) => handler.shouldHandleWhenRejected()).forEach((handler) {
       _handleReport(report, handler);
     });
 
@@ -713,9 +698,8 @@ class Catcher2 implements ReportModeAction {
   static void addDefaultErrorWidget({
     bool showStacktrace = true,
     String title = 'An application error has occurred',
-    String description =
-        'There was unexpected situation in application. Application has been '
-            'able to recover from error state.',
+    String description = 'There was unexpected situation in application. Application has been '
+        'able to recover from error state.',
     double maxWidthForSmallMode = 150,
   }) {
     ErrorWidget.builder = (details) => Catcher2ErrorWidget(
@@ -756,8 +740,7 @@ class Catcher2 implements ReportModeAction {
     final occurrenceTimeout = _currentConfig.reportOccurrenceTimeout;
     final nowDateTime = DateTime.now();
     _reportsOccurrenceMap.removeWhere((key, value) {
-      final occurrenceWithTimeout =
-          key.add(Duration(milliseconds: occurrenceTimeout));
+      final occurrenceWithTimeout = key.add(Duration(milliseconds: occurrenceTimeout));
       return nowDateTime.isAfter(occurrenceWithTimeout);
     });
   }
