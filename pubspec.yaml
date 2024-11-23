@@ -7,13 +7,13 @@ issue_tracker: https://github.com/ThexXTURBOXx/catcher_2/issues
 funding:
   - https://github.com/sponsors/ThexXTURBOXx
 screenshots:
-  - description: 'The catcher_2 logo'
+  - description: "The catcher_2 logo"
     path: screenshots/logo.png
-  - description: 'catcher_2 in action with notifications'
+  - description: "catcher_2 in action with notifications"
     path: screenshots/1.png
-  - description: 'catcher_2 in action with emails'
+  - description: "catcher_2 in action with emails"
     path: screenshots/3.png
-  - description: 'catcher_2 in action with dialogs'
+  - description: "catcher_2 in action with dialogs"
     path: screenshots/6.png
 topics:
   - analysis
@@ -22,21 +22,21 @@ topics:
   - logging
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ">=3.0.0 <4.0.0"
   flutter: ">=3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  device_info_plus: ^9.0.0
-  device_info_plus_platform_interface: ^7.0.0
+  device_info_plus: ^11.1.1
+  device_info_plus_platform_interface: ^7.0.1
   dio: ^5.0.1
   flutter_mailer: 2.0.1
   fluttertoast: ^8.0.8
   logging: ^1.0.2
   mailer: ^6.0.0
-  package_info_plus: ^4.0.0
+  package_info_plus: ^8.1.1
   sentry: ^7.2.0
   universal_io: ^2.0.4
 
