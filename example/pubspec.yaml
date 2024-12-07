@@ -27,7 +27,11 @@ dependencies:
   dio: ^5.0.1
   flutter:
     sdk: flutter
-  flutter_local_notifications: ^15.1.1
+  flutter_local_notifications:
+    git:
+      url: https://github.com/fenil2024/flutter_local_notifications.git
+      path: "flutter_local_notifications"
+      ref: 0e71c546a0b09979e30b3d03d07a774b7ecd3e26
   flutter_localizations:
     sdk: flutter
   path_provider: ^2.0.1
