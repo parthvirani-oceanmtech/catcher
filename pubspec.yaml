@@ -29,14 +29,25 @@ dependencies:
   flutter:
     sdk: flutter
 
-  device_info_plus: ^11.1.1
+  device_info_plus:
+    git:
+      url: https://github.com/fenil2024/plus_plugins.git
+      path: "packages/device_info_plus/device_info_plus"
+      ref: c487f56014d65baa0410d6a64d64043cfcbda39d
   device_info_plus_platform_interface: ^7.0.1
   dio: ^5.0.1
-  flutter_mailer: 2.0.1
+  flutter_mailer:
+    git:
+      url: https://github.com/fenil2024/flutter_mailer.git
+      ref: a098e38546e542255ba716723dbf12b5ab99baa0
   fluttertoast: ^8.0.8
   logging: ^1.0.2
   mailer: ^6.0.0
-  package_info_plus: ^8.1.1
+  package_info_plus:
+    git:
+      url: https://github.com/fenil2024/plus_plugins.git
+      path: "packages/package_info_plus/package_info_plus"
+      ref: c487f56014d65baa0410d6a64d64043cfcbda39d
   sentry: ^7.2.0
   universal_io: ^2.0.4
 
