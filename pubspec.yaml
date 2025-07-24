@@ -29,7 +29,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  device_info_plus: ^11.2.0
+  device_info_plus: ^11.5.0
   device_info_plus_platform_interface: ^7.0.2
   dio: ^5.7.0
   flutter_mailer: ^2.1.2
